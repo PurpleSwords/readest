@@ -100,3 +100,11 @@ gh pr create --repo PurpleSwords/readest --base main
   工作流完成 fork 适配前，只管理标签，不发布 GitHub Release。
 
 上面的 fork 标签仅为命名示例，本次维护配置不创建应用发布或部署生产环境。
+
+## 保留现有内存优化
+
+线上旧镜像已使用 Turso 内存补丁，本 fork 通过 `pnpm-workspace.yaml`
+中的 `patchedDependencies` 配置保留它：`@readest/turso-database-wasm-common@0.7.0-pre.3-readest.0`
+初始 shared memory 从 4000 页降至 1024 页（64 MiB），最大值仍为 65536 页。
+WASM 二进制和数据库格式保持原样。补丁文件和锁文件随源码版本管理；升级该依赖
+时必须重新验证补丁与 WASM 的最小内存要求，不能忽略补丁应用失败。
