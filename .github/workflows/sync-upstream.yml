@@ -1,0 +1,45 @@
+name: Sync upstream mirror
+
+on:
+  schedule:
+    # 04:23 Asia/Shanghai (UTC+8), away from the top of the hour.
+    - cron: '23 20 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream-mirror
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'PurpleSwords/readest'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out fork history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          fetch-tags: false
+
+      - name: Fast-forward the upstream mirror
+        shell: bash
+        run: |
+          set -euo pipefail
+          git remote add upstream https://github.com/readest/readest.git
+          git fetch --no-tags upstream main
+          upstream_sha=$(git rev-parse refs/remotes/upstream/main)
+
+          # No force push: fail if someone puts fork-only commits on the mirror
+          # or upstream rewrites history. main and release tags are untouched.
+          git push origin "${upstream_sha}:refs/heads/upstream-main"
+
+          {
+            echo '### Upstream mirror synchronized'
+            echo "- Upstream commit: ${upstream_sha}"
+            echo '- Destination: upstream-main'
+            echo '- No pull request, main update, tag publication or deployment.'
+          } >> "$GITHUB_STEP_SUMMARY"
