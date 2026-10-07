@@ -60,6 +60,7 @@ overrides:
 
 patchedDependencies:
   '@ai-sdk/provider-utils@4.0.57': d133f4100de3ea1efe5738900131161d41615fb3e9747933a01106420c5997e5
+  '@readest/turso-database-wasm-common@0.7.0-pre.3-readest.0': c046235f561e7f455aaaf838d47d076f8e0b188304615bef15a7f49b8312576e
   mdast-util-gfm-autolink-literal@2.0.1: a119b196bac546b8f07e1a9600ced6f526b0676e2b959914868e393ecffbaff8
 
 importers:
@@ -179,7 +180,7 @@ importers:
         version: 0.7.0-pre.3-readest.0
       '@readest/turso-database-wasm-common':
         specifier: 0.7.0-pre.3-readest.0
-        version: 0.7.0-pre.3-readest.0
+        version: 0.7.0-pre.3-readest.0(patch_hash=c046235f561e7f455aaaf838d47d076f8e0b188304615bef15a7f49b8312576e)
       '@serwist/next':
         specifier: ^9.5.6
         version: 9.5.11(next@16.3.8(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.60.0)(@types/node@22.19.19)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(typescript@7.0.2)(webpack@5.106.2(lightningcss@1.32.0)(postcss@8.5.25))
@@ -11250,7 +11251,7 @@ snapshots:
 
   '@readest/turso-database-common@0.7.0-pre.3-readest.0': {}
 
-  '@readest/turso-database-wasm-common@0.7.0-pre.3-readest.0':
+  '@readest/turso-database-wasm-common@0.7.0-pre.3-readest.0(patch_hash=c046235f561e7f455aaaf838d47d076f8e0b188304615bef15a7f49b8312576e)':
     dependencies:
       '@emnapi/core': 1.8.1
       '@emnapi/runtime': 1.8.1
@@ -11260,7 +11261,7 @@ snapshots:
   '@readest/turso-database-wasm@0.7.0-pre.3-readest.0':
     dependencies:
       '@readest/turso-database-common': 0.7.0-pre.3-readest.0
-      '@readest/turso-database-wasm-common': 0.7.0-pre.3-readest.0
+      '@readest/turso-database-wasm-common': 0.7.0-pre.3-readest.0(patch_hash=c046235f561e7f455aaaf838d47d076f8e0b188304615bef15a7f49b8312576e)
 
   '@resvg/resvg-wasm@2.4.0': {}
 

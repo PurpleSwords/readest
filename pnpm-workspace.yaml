@@ -19,6 +19,7 @@ onlyBuiltDependencies:
   - sharp
 
 patchedDependencies:
+  '@readest/turso-database-wasm-common@0.7.0-pre.3-readest.0': patches/@readest__turso-database-wasm-common@0.7.0-pre.3-readest.0.patch
   '@ai-sdk/provider-utils@4.0.57': patches/@ai-sdk__provider-utils@4.0.57.patch
   mdast-util-gfm-autolink-literal@2.0.1: patches/mdast-util-gfm-autolink-literal@2.0.1.patch
 
