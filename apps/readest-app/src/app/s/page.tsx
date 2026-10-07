@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { READEST_WEB_BASE_URL, SHARE_BASE_URL } from '@/services/constants';
+import { buildShareUrl, getShareWebBaseUrl } from '@/utils/shareUrl';
 import { resolveActiveShare } from '@/libs/shareServer';
 import ShareLanding from './ShareLanding';
 
@@ -49,8 +49,8 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
     };
   }
   const { share } = result;
-  const shareUrl = `${SHARE_BASE_URL}/${token}`;
-  const ogImage = `${READEST_WEB_BASE_URL}/api/share/${token}/og.png`;
+  const shareUrl = buildShareUrl(token);
+  const ogImage = `${getShareWebBaseUrl()}/api/share/${token}/og.png`;
 
   return {
     title: `${share.bookTitle} · Shared via Readest`,

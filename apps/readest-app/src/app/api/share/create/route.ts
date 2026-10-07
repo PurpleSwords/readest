@@ -3,8 +3,8 @@ import { createSupabaseAdminClient } from '@/utils/supabase';
 import { validateUserAndToken } from '@/utils/access';
 import { generateShareToken } from '@/libs/shareServer';
 import { objectExists } from '@/utils/object';
+import { buildShareUrl } from '@/utils/shareUrl';
 import {
-  SHARE_BASE_URL,
   SHARE_CFI_MAX_LENGTH,
   SHARE_EXPIRATION_DAYS,
   SHARE_MAX_PER_USER,
@@ -172,7 +172,7 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     token: raw,
-    url: `${SHARE_BASE_URL}/${raw}`,
+    url: buildShareUrl(raw),
     expiresAt: expiresAt.toISOString(),
   });
 }

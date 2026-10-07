@@ -1,5 +1,6 @@
 import { writeTextToClipboard } from '@/utils/clipboard';
-import { READEST_WEB_BASE_URL, SHARE_BASE_URL, SHARE_TOKEN_LENGTH } from '@/services/constants';
+import { READEST_WEB_BASE_URL, SHARE_TOKEN_LENGTH } from '@/services/constants';
+import { getShareWebBaseUrl } from '@/utils/shareUrl';
 
 export interface ShareDeepLink {
   token: string;
@@ -14,7 +15,7 @@ const isValidToken = (raw: unknown): raw is string => typeof raw === 'string' &&
 
 // Canonical share URL embedded in the dialog, share sheet, and any "copy link"
 // affordance. Always points at the public web target.
-export const buildShareUrl = (token: string): string => `${SHARE_BASE_URL}/${token}`;
+export { buildShareUrl } from '@/utils/shareUrl';
 
 // Parses both the custom-scheme and HTTPS forms used by the deeplink ingress.
 //   readest://share/{token}
@@ -112,9 +113,12 @@ export const shareSelectedText = async (
 };
 
 const isWebReadestHost = (host: string): boolean => {
-  // Matches the production host and any preview domain Readest may serve from.
-  // Conservative: accepts only the exact production host or a *.readest.com
-  // subdomain so a third-party site cannot impersonate a share URL.
-  if (host === new URL(READEST_WEB_BASE_URL).host) return true;
-  return host.endsWith('.readest.com');
+  // Accept the configured self-hosted host (including its port), as well as
+  // official and preview domains. Other third-party hosts remain excluded.
+  if (host === new URL(READEST_WEB_BASE_URL).host || host.endsWith('.readest.com')) return true;
+  try {
+    return host === new URL(getShareWebBaseUrl()).host;
+  } catch {
+    return false;
+  }
 };
