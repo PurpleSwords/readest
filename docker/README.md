@@ -192,6 +192,20 @@ to reach minio unchanged or the presigned signatures will not verify, and the
 request body limit has to be lifted on the bucket location or large book uploads
 are truncated.
 
+### Book sharing on a custom domain
+
+Set `SITE_URL` to the public Readest URL (for example,
+`https://books.example.com`). Compose passes this to the client container as
+`API_BASE_URL`; share links and their Open Graph preview images use that address
+at runtime. Existing share tokens remain valid when the public URL changes.
+
+For deployments without this compose file, set `API_BASE_URL` to the public
+Readest URL, not an internal Docker hostname or a URL ending in `/api`.
+`NEXT_PUBLIC_API_BASE_URL` is the build-time fallback, followed by `SITE_URL`
+on the server and the official Readest URL when no address is configured.
+The browser receives the runtime address through `/runtime-config.js`, so a
+single image can serve different self-hosted domains without rebuilding.
+
 ### CJK fonts on a custom domain
 
 the reader loads a few CJK webfont bundles from Readest's CDN, which only sends
