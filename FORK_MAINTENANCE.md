@@ -31,13 +31,19 @@ PR、不合入 fork 的 `main`、不推送标签、不部署。
 镜像分支首次运行时自动创建。若上游重写历史或镜像混入定制提交，同步会失败，
 不会强推覆盖。此时先核对双方提交，再决定如何修复镜像。
 
-仅启用本 fork 的 `Sync upstream mirror` 工作流。上游继承的工作流包含
-nightly、桌面发布、Vercel 与 Docker 发布，以及自动创建 PR 的任务；应在
-适配 fork 的构建与部署之前保持禁用。每次升级需检查是否新增上游工作流。
+本 fork 只启用 `Sync upstream mirror` 和 `Android E2E (CDP)`。上游继承的
+其余工作流（nightly、Nix、Vercel、Docker、CodeQL、PR checks 等）已禁用：它们
+依赖上游的发布凭据或仓库设置，在 fork 中只会持续失败。每次升级需检查上游是否
+新增工作流，并按同样标准决定是否保持禁用。
 
-不需要 PAT 或 PR 写权限；同步使用工作流内置的 `GITHUB_TOKEN`，授予
-`contents: write`。如果 GitHub 拒绝同步涉及工作流文件的更新，任务应报错，
-由维护者检查失败日志与所需权限后处理，不自动扩大权限。
+同步通过 SSH 使用写权限仓库部署密钥推送，工作流本身只保留
+`contents: read`。原因是上游会修改 `.github/workflows/*`，而 GitHub 禁止
+Actions 内置的 `GITHUB_TOKEN`（GitHub App 安装令牌）创建或更新工作流文件，
+且 `workflows` 权限无法授予该令牌；2026-10-08 至 10-13 的定时同步正是因此失败。
+
+部署密钥 `upstream-mirror (fork sync)` 只对本仓库有写权限，私钥保存在仓库
+secret `SYNC_DEPLOY_KEY`。密钥可随时在仓库设置中撤销；轮换时先添加新部署
+密钥并更新 secret，再删除旧密钥。密钥缺失时工作流会以明确错误失败。
 
 GitHub 会在公共仓库连续 60 天无活动后停用定时工作流；长期不维护时需在
 Actions 页面检查并重新启用。自动同步成功不代表生产环境已升级。
